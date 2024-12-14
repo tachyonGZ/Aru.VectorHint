@@ -42,7 +42,21 @@ if(IS_DIRECTORY ${build_root}/hl2sdk)
     set (HL2SDK "${build_root}/hl2sdk")
     MESSAGE(STATUS "Found HL2SDK directory at ${HL2SDK}")
 elseif()
-    MESSAGE(STATUS "Looking for other SDKs")
+    MESSAGE(FATAL_ERROR "Couldn't find hl2sdk at ")
+endif()
+
+if(IS_DIRECTORY ${build_root}/sourcepawn-1.11-dev)
+    set(SOURCEPAWN_SDK "${build_root}/sourcepawn-1.11-dev")
+    MESSAGE(STATUS "Found sourcepawn directory at ${SOURCEPAWN_SDK}")
+elseif()
+    MESSAGE(FATAL_ERROR "Couldn't find sourcepawn at ")
+endif()
+
+if(IS_DIRECTORY ${build_root}/amtl-master)
+    set(AMTL_SDK "${build_root}/amtl-master")
+    MESSAGE(STATUS "Found amtl directory at ${SOURCEPAWN_SDK}")
+elseif()
+    MESSAGE(FATAL_ERROR "Couldn't find amtl at ")
 endif()
 
 ##################################################################

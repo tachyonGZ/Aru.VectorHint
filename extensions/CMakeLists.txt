@@ -4,12 +4,12 @@ add_library(
 	"extension.cpp"
 	"${SM}/public/smsdk_ext.cpp"
 	"VectorHint.cpp"
-) 
+)
 
 #string(REPLACE " " "" ext_name ${CMAKE_PROJECT_NAME})
 #set_target_properties(extension PROPERTIES OUTPUT_NAME "${ext_name}.ext" )
 set_target_properties(extension PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}.ext")
-set_target_properties(extension PROPERTIES CXX_STANDARD 17)
+set_target_properties(extension PROPERTIES CXX_STANDARD 20)
 
 #get_target_property(ext_name extension OUTPUT_NAME)
 
@@ -45,8 +45,6 @@ target_compile_definitions(extension
 			>
 )
 
-
-
 target_link_libraries(
 	extension 
 	PRIVATE
@@ -54,9 +52,6 @@ target_link_libraries(
 	-static-libstdc++
 )
 ]]
-
- set(SOURCEPAWN_SDK "${build_root}/sourcepawn-1.11-dev")
- set(AMTL_SDK "${build_root}/amtl-c-14")
 
 target_include_directories(
 	extension 
