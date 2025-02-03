@@ -6,16 +6,50 @@ add_library(
 	"VectorHint.cpp"
 )
 
-#string(REPLACE " " "" ext_name ${CMAKE_PROJECT_NAME})
-#set_target_properties(extension PROPERTIES OUTPUT_NAME "${ext_name}.ext" )
-set_target_properties(extension PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}.ext")
+set_target_properties(extension PROPERTIES LIBRARY_OUTPUT_NAME "${CMAKE_PROJECT_NAME}.ext")
 set_target_properties(extension PROPERTIES CXX_STANDARD 20)
-
-#get_target_property(ext_name extension OUTPUT_NAME)
 
 target_compile_options(extension PUBLIC $<$<PLATFORM_ID:Linux>:-m32>)
 target_link_options(extension PUBLIC $<$<PLATFORM_ID:Linux>:-m32>)
 
+if (UNIX)
+	target_compile_definitions(extension
+		PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
+					GNUC
+					-D_LINUX
+					-DPOSIX
+					-Dstricmp=strcasecmp 
+					-D_stricmp=strcasecmp
+					-D_snprintf=snprintf
+					-D_vsnprintf=vsnprintf
+					-DHAVE_STDINT_H
+					$<$<CONFIG:Debug>: 
+						-DDEBUG 
+					>
+					$<$<CONFIG:Release>: 
+						-DNDEBUG 
+					>
+				>
+	)
+elseif (WIN32)
+	target_compile_definitions(extension
+	PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
+				GNUC
+				-D_LINUX
+				-DPOSIX
+				-DHAVE_STDINT_H
+				-D_CRT_SECURE_NO_WARNINGS
+				$<$<CONFIG:Debug>: 
+					-DDEBUG 
+				>
+				$<$<CONFIG:Release>: 
+					-DNDEBUG 
+				>
+			>
+)
+else()
+	message(FATAL_ERROR "unknown")
+endif()
 #[[
 target_compile_options(extension 
 	PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
@@ -30,20 +64,7 @@ target_compile_options(extension
 				> 
 			>
 )
-
-target_compile_definitions(extension
-	PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
-				GNUC -D_LINUX -DPOSIX -Dstricmp=strcasecmp 
-				-D_stricmp=strcasecmp -D_snprintf=snprintf
-				-D_vsnprintf=vsnprintf -DHAVE_STDINT_H
-				$<$<CONFIG:Debug>: 
-					-DDEBUG 
-				>
-				$<$<CONFIG:Release>: 
-					-DNDEBUG 
-				>
-			>
-)
+]]
 
 target_link_libraries(
 	extension 
@@ -51,7 +72,6 @@ target_link_libraries(
 	-static-libgcc
 	-static-libstdc++
 )
-]]
 
 target_include_directories(
 	extension 
